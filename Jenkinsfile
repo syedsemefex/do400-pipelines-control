@@ -29,6 +29,9 @@ pipeline {
 					}
 
 				}
+			}
+		}
+	}
 		stage('Deploy') {
 
 			when {
@@ -44,7 +47,5 @@ pipeline {
 			}	
 
 		}
-
-	}	
 
 }
