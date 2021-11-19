@@ -9,11 +9,13 @@ pipeline {
 		}
 
 	}
+
 	parameters {
 
 		booleanParam(name: "RUN_FRONTEND_TESTS", defaultValue: true)
 
 	}
+
 	stages {
 
 		stage('Run Tests') {
@@ -29,9 +31,23 @@ pipeline {
 					}
 
 				}
+
+				stage('Frontend Tests') {
+
+					steps {
+
+						sh 'node ./frontend/test.js'
+
+					}
+
+				}
+
 			}
+
 		}
+
 	}
+
 		stage('Deploy') {
 
 			when {
