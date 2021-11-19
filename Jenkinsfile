@@ -1,67 +1,79 @@
 pipeline {
 
-		agent {
+  agent {
 
-			node {
+    node {
 
-				label 'nodejs'
+      label 'nodejs'
 
-			}
+    }
 
-		}
+  }
 
-		parameters {
+  parameters {
 
-			booleanParam(name: "RUN_FRONTEND_TESTS", defaultValue: true)
+    booleanParam(name: "RUN_FRONTEND_TESTS", defaultValue: true)
 
-		}
+  }
 
-		stage('Run Tests') {
+  stage('Run Tests') {
 
-			parallel {
+    parallel {
 
-				stage('Backend Tests') {
+      stage('Backend Tests') {
 
-					steps {
+        steps {
 
-						sh 'node ./backend/test.js'
+          sh 'node ./backend/test.js'
 
-					}
+        }
 
-				}
+      }
 
-				stage('Frontend Tests') {
+      stage('Frontend Tests') {
 
-					when { expression { params.RUN_FRONTEND_TESTS } }
+        when {
 
-					steps {
+          expression {
 
-						sh 'node ./frontend/test.js'
+            params.RUN_FRONTEND_TESTS
 
-					}
+          }
 
-				}
+        }
 
-			}
+        steps {
 
-		}
+          sh 'node ./frontend/test.js'
 
-		stage('Deploy') {
+        }
 
-			when {
+      }
 
-				expression { env.GIT_BRANCH == 'origin/main' }
+    }
 
-			}
+  }
 
-			steps {
+  stage('Deploy') {
 
-				echo 'Deploying...'
+    when {
 
-			}
+      expression {
 
-		}
+        env.GIT_BRANCH == 'origin/main'
 
-	}
+      }
+
+    }
+
+    steps {
+
+      echo 'Deploying...'
+
+    }
+
+  }
+
+}
 
 }
