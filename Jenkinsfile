@@ -1,22 +1,20 @@
 pipeline {
 
-	agent {
+		agent {
 
-		node {
+			node {
 
-			label 'nodejs'
+				label 'nodejs'
+
+			}
 
 		}
 
-	}
+		parameters {
 
-	parameters {
+			booleanParam(name: "RUN_FRONTEND_TESTS", defaultValue: true)
 
-		booleanParam(name: "RUN_FRONTEND_TESTS", defaultValue: true)
-
-	}
-
-	stages {
+		}
 
 		stage('Run Tests') {
 
@@ -26,13 +24,15 @@ pipeline {
 
 					steps {
 
-						sh 'node  ./backend/test.js'
+						sh 'node ./backend/test.js'
 
 					}
 
 				}
 
 				stage('Frontend Tests') {
+
+					when { expression { params.RUN_FRONTEND_TESTS } }
 
 					steps {
 
@@ -46,8 +46,6 @@ pipeline {
 
 		}
 
-	}
-
 		stage('Deploy') {
 
 			when {
@@ -60,8 +58,10 @@ pipeline {
 
 				echo 'Deploying...'
 
-			}	
+			}
 
 		}
+
+	}
 
 }
